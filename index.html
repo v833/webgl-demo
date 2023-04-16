@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+
+    <!-- 顶点着色器 -->
+    <script id="vertexShader" type="x-shader/x-vertex">
+      attribute vec4 a_Attr;
+      varying float v_Alpha;
+      void main() {
+        //声明顶点位置
+        gl_Position = vec4(a_Attr.x, a_Attr.y, a_Attr.z, 1.0);
+        //声明待绘制的点的大小
+        gl_PointSize = a_Attr.z;
+        v_Alpha=a_Attr.w;
+      }
+    </script>
+
+    <!-- 片元着色器 -->
+    <script id="fragmentShader" type="x-shader/x-fragment">
+      precision mediump float;
+      varying vec4 v_Alpha;
+      void main() {
+        float dist = distance(gl_PointCoord, vec2(0.5, 0.5));
+        if (dist < 0.5) {
+          gl_FragColor = vec4(0.87, 0.91, 1.0, v_Alpha);
+        } else {
+          discard;
+        }
+      }
+    </script>
+
+    <script type="module" src="./star.js"></script>
+  </body>
+</html>
